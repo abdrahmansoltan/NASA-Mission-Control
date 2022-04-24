@@ -1,7 +1,9 @@
 const express = require("express");
-const cors = require("cors");
-const planetsRouter = require("./routes/planets/planets.router");
 const path = require("path");
+const cors = require("cors");
+const morgan = require("morgan");
+const planetsRouter = require("./routes/planets/planets.router");
+const launchesRouter = require("./routes/launches/launches.router");
 
 // CORS
 const corsOptions = {
@@ -12,12 +14,16 @@ const corsOptions = {
 const app = express();
 // ---------------Middlewares--------------- //
 app.use(cors(corsOptions)); // Middleware
+app.use(morgan("combined")); // logging Middleware
 app.use(express.json()); // Middleware: parse any incoming JSON from Requests
 
 app.use(planetsRouter);
+app.use(launchesRouter);
 
-app.use(express.static(path.join(__dirname, "..", "public")));
-app.use("/", (req, res) => {
+// ---------------FOR PRODUCTION--------------- //
+app.use(express.static(path.join(__dirname, "..", "public"))); // Middleware
+// we use "*" --> so that it matches all routes from the code in the client-side
+app.get("/*", (req, res) => {
   res.sendFile(path.join(__dirname, "..", "public", "index.html"));
 });
 
