@@ -14,6 +14,11 @@ const launch = {
 // we use flightNumber as a key as it's Unique
 launches.set(launch.flightNumber, launch);
 
+// to make the model responsible of outputing clean and ready data
+function getAllLaunches() {
+  return Array.from(launches.values());
+}
+
 module.exports = {
-  launches,
+  getAllLaunches,
 };

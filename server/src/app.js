@@ -14,7 +14,7 @@ const corsOptions = {
 const app = express();
 // ---------------Middlewares--------------- //
 app.use(cors(corsOptions)); // Middleware
-app.use(morgan("combined")); // logging Middleware
+// app.use(morgan("combined")); // logging Middleware
 app.use(express.json()); // Middleware: parse any incoming JSON from Requests
 
 app.use(planetsRouter);
