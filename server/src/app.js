@@ -17,8 +17,8 @@ app.use(cors(corsOptions)); // Middleware
 // app.use(morgan("combined")); // logging Middleware
 app.use(express.json()); // Middleware: parse any incoming JSON from Requests
 
-app.use(planetsRouter);
-app.use(launchesRouter);
+app.use("/planets",planetsRouter);
+app.use("/launches", launchesRouter);
 
 // ---------------FOR PRODUCTION--------------- //
 app.use(express.static(path.join(__dirname, "..", "public"))); // Middleware
