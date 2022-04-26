@@ -19,9 +19,11 @@ const launch = {
 // we use flightNumber as a key as it's Unique
 // launches.set(launch.flightNumber, launch);
 
-function existsLaunchWithId(launchId) {
-  console.log(launches);
-  return launches.has(launchId); // true/false
+async function existsLaunchWithId(launchId) {
+  // return launches.has(launchId); // true/false
+  return await launchesDatebase.findOne({
+    flightNumber: launchId,
+  }); // true / false
 }
 
 async function getlatestFlightNumber() {
@@ -66,7 +68,7 @@ async function scheduleNewLaunch(launch) {
   const newLaunch = Object.assign(launch, {
     success: true,
     upcoming: true,
-    customer: ["ZTM", "NASA"],
+    customers: ["ZTM", "NASA"],
     flightNumber: newFlightNumber,
   });
 
@@ -86,11 +88,24 @@ async function scheduleNewLaunch(launch) {
 //   );
 // }
 
-function abortLaunchById(launchID) {
-  const aborted = launches.get(launchID);
-  aborted.upcoming = false;
-  aborted.success = false;
-  return aborted;
+async function abortLaunchById(launchID) {
+  // const aborted = launches.get(launchID);
+  // aborted.upcoming = false;
+  // aborted.success = false;
+  // return aborted;
+
+  // MongoDB : we will update the item matching the launchId
+  const aborted = await launchesDatebase.updateOne(
+    {
+      flightNumber: launchID,
+    },
+    {
+      // the properties we want to change (change to this:)
+      upcoming: false,
+      success: false,
+    }
+  );
+  return aborted.acknowledged === true && aborted.modifiedCount === 1;
 }
 
 module.exports = {
