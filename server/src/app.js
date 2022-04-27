@@ -2,8 +2,7 @@ const express = require("express");
 const path = require("path");
 const cors = require("cors");
 const morgan = require("morgan");
-const planetsRouter = require("./routes/planets/planets.router");
-const launchesRouter = require("./routes/launches/launches.router");
+const api = require("./routes/api");
 
 // CORS
 const corsOptions = {
@@ -17,8 +16,7 @@ app.use(cors(corsOptions)); // Middleware
 // app.use(morgan("combined")); // logging Middleware
 app.use(express.json()); // Middleware: parse any incoming JSON from Requests
 
-app.use("/planets",planetsRouter);
-app.use("/launches", launchesRouter);
+app.use("/v1", api);
 
 // ---------------FOR PRODUCTION--------------- //
 app.use(express.static(path.join(__dirname, "..", "public"))); // Middleware

@@ -5,6 +5,7 @@ const app = require("./app");
 
 const { mongoConnect } = require("./services/mongo");
 const { loadPlanetsData } = require("./models/planets.model");
+const { loadLaunchData } = require("./models/launches.model");
 
 // -----------HTTP Server----------- //
 const server = http.createServer(app); // using express as a listening function for the http-server
@@ -15,6 +16,8 @@ async function startServer() {
 
   // this is done so that we have the data ready when we start the server before any requests so that it's available for any request
   await loadPlanetsData();
+
+  await loadLaunchData();
 
   server.listen(PORT, () => {
     console.log(`listening on port http://localhost:${PORT}`);
