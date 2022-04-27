@@ -5,9 +5,12 @@ const {
   existsLaunchWithId,
   abortLaunchById,
 } = require("../../models/launches.model");
+const { getPgination } = require("../../services/query");
 
 async function httpgetAllLaunches(req, res) {
-  return res.status(200).json(await getAllLaunches());
+  const { skip, limit } = getPgination(req.query); // getting the query parameters
+  const launches = await getAllLaunches(skip, limit);
+  return res.status(200).json(launches);
 }
 
 async function httpAddNewLaunch(req, res) {

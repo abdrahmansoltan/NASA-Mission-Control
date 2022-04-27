@@ -6,18 +6,19 @@ const planets = require("./planets.mongo"); // to get the planets list
 // let latestFlightNumber = 100;
 const DEFAULT_FLIGHT_NUMBER = 100;
 
-const launch = {
-  flightNumber: 100, // flight_number
-  mission: "Kepler Exploration X", // name
-  rocket: "Explorer IS1", // rocket.name
-  launchData: new Date("December 27, 2030"), // date_local
-  target: "Kepler-442 b", // not applicable
-  customers: ["ZTM", "NASA"], // payload.customers for each payload
-  upcoming: true, // upcoming
-  success: true, // success
-};
+// Hard-coded launch-data for dev
+// const launch = {
+//   flightNumber: 100, // flight_number
+//   mission: "Kepler Exploration X", // name
+//   rocket: "Explorer IS1", // rocket.name
+//   launchData: new Date("December 27, 2030"), // date_local
+//   target: "Kepler-442 b", // not applicable
+//   customers: ["ZTM", "NASA"], // payload.customers for each payload
+//   upcoming: true, // upcoming
+//   success: true, // success
+// };
 
-//--------GETTING ALL PREVIOS LAUNCHES--------//
+//--------GETTING ALL PREVIOS LAUNCHES (REAL-LIFE DATA)--------//
 // from: https://github.com/r-spacex/SpaceX-API/tree/master/docs#rspacex-api-docs
 const SPACEX_API_URL = "https://api.spacexdata.com/v4/launches/query";
 
@@ -114,9 +115,13 @@ async function getlatestFlightNumber() {
 }
 
 // to make the model responsible of outputing clean and ready data
-async function getAllLaunches() {
+async function getAllLaunches(skip, limit) {
   // return Array.from(launches.values());
-  return await launchesDatabase.find({}, { _id: 0, __v: 0 }); // find all documents without showng the id or veersion-key in the response
+  return await launchesDatabase
+    .find({}, { _id: 0, __v: 0 })
+    .sort({ flightNumber: 1 })
+    .skip(skip)
+    .limit(limit); // find all documents without showng the id or veersion-key in the response + apply pagination using (limit & skip) query parameters
 }
 
 //--------------- inserting new launch----------------- //
@@ -130,8 +135,6 @@ async function saveLaunch(launch) {
     { upsert: true }
   );
 }
-
-saveLaunch(launch);
 
 async function scheduleNewLaunch(launch) {
   // checking for integrity as if the planet's name exists in the database
