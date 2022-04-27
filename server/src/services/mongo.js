@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 // -----------MONGODB----------- //
-const MONGO_URL = `mongodb+srv://nasa-api:fHIRUYJcfKCaRafC@nasacluster.44pi6.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+const MONGO_URL = process.env.MONGO_URL;
 // const mongoOptions = {
 //   useCreateIndex: true,
 //   useNewUrlParser: true,
