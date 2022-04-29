@@ -1,16 +1,18 @@
 const request = require("supertest");
 const app = require("../../app");
+const { loadPlanetsData } = require("../../models/planets.model");
 const { mongoConnect, mongoDisconnect } = require("../../services/mongo");
 
 describe("Launcjes API", () => {
   // connect ot mongoDB at the beginning before anything
   beforeAll(async () => {
     await mongoConnect();
+    await loadPlanetsData();
   });
   afterAll(async () => {
     await mongoDisconnect();
   });
-  
+
   describe("Test GET /launches", () => {
     test("It should respond with 200 seccess", async () => {
       const response = await request(app)
