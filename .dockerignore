@@ -1,0 +1,6 @@
+.git
+
+# so that we get fresh installed modules
+*/node_modules
+
+server/public
